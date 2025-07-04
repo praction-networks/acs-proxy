@@ -12,7 +12,7 @@ import (
 func initializeHttpServer(r http.Handler) *http.Server {
 	port := config.AppConfig.ServerEnv.Port
 	if port == "" {
-		port = "3000" // Default port
+		port = "3030" // Default port
 	}
 	server := &http.Server{
 		Addr:    fmt.Sprintf(":%s", port),
