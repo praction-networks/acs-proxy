@@ -32,7 +32,7 @@ COPY --from=builder /app/internal/config /internal/config
 COPY --from=builder /app/docs /docs
 
 # Expose ports
-EXPOSE 3000
+EXPOSE 3030
 EXPOSE 9001
 
 # Entrypoint
