@@ -4,7 +4,7 @@ ENVIRONMENT:
   VERSION: "0.0.1"
   HOST: "acsproxy.praction.in"
 SERVER:
-  PORT: "3000"
+  PORT: "3030"
 MONGODB:
   HOST: "10.5.25.12"
   PORT: "27017"
