@@ -1,0 +1,18 @@
+ENVIRONMENT:
+  ENV: production
+  APP: "acs-proxy"
+  VERSION: "0.0.1"
+  HOST: "acsproxy.praction.in"
+SERVER:
+  PORT: "3000"
+MONGODB:
+  HOST: "10.5.25.12"
+  PORT: "27017"
+  TLSENABLED: false
+  DATABASE: "genieacs"
+LOGGER:
+  LOGLEVEL: "info"
+GENIEACS:
+  NBI_URL: "http://cms.bitfiber.in:7557"
+AUTH:
+  APIKEY: "3hpbg6fCZM1mIiFqkrIUMhFu1XB4SYS52v7ULvby6Ls2zEe9zDJsbSMJiS3YeBZvRQDTyhBfXLuvBO32e1LIGsG3a28LtI5dxLwF39ff8YeRcvMglU4aJtk8mzoXMXeHzTom"

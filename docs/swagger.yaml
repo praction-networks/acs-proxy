@@ -1,0 +1,926 @@
+basePath: /api/v1
+definitions:
+  models.AddObjectRequest:
+    properties:
+      objectName:
+        type: string
+    required:
+    - objectName
+    type: object
+  models.BaseError:
+    description: Generic error response wrapper.
+    properties:
+      errors:
+        description: Errors is a list of detailed field-level errors.
+        items:
+          $ref: '#/definitions/models.ErrorDetail'
+        type: array
+      message:
+        description: |-
+          Message is a human-readable error message.
+          Example: Invalid input
+        example: Invalid input
+        type: string
+      status:
+        description: |-
+          Status of the response (e.g., error).
+          Example: error
+        example: error
+        type: string
+      status_code:
+        description: |-
+          StatusCode is the HTTP status code.
+          Example: 400
+        example: 400
+        type: integer
+    type: object
+  models.BaseSuccess:
+    description: Generic success response wrapper.
+    properties:
+      data:
+        description: Data holds the response payload. It can be any type.
+      message:
+        description: |-
+          Message is a human-readable message.
+          Example: Operation completed successfully
+        example: Operation completed successfully
+        type: string
+      status:
+        description: |-
+          Status of the response (e.g., success, info).
+          Example: success
+        example: success
+        type: string
+      status_code:
+        description: |-
+          StatusCode is the HTTP status code.
+          Example: 200
+        example: 200
+        type: integer
+    type: object
+  models.DeleteObjectRequest:
+    properties:
+      objectName:
+        type: string
+    required:
+    - objectName
+    type: object
+  models.DeviceID:
+    properties:
+      _Manufacturer:
+        type: string
+      _OUI:
+        type: string
+      _ProductClass:
+        type: string
+      _SerialNumber:
+        type: string
+    type: object
+  models.DeviceModel:
+    properties:
+      _deviceId:
+        $ref: '#/definitions/models.DeviceID'
+      _id:
+        type: string
+      _lastBoot:
+        type: string
+      _lastInform:
+        type: string
+      _registered:
+        type: string
+      _timestamp:
+        type: string
+      FactoryReset:
+        additionalProperties: true
+        type: object
+      InternetGatewayDevice:
+        additionalProperties: true
+        type: object
+      Reboot:
+        additionalProperties: true
+        type: object
+      VirtualParameters:
+        additionalProperties: true
+        type: object
+    type: object
+  models.DeviceResponseModel:
+    properties:
+      data:
+        description: Data contains pagination and list of app messengers
+        properties:
+          data:
+            items:
+              $ref: '#/definitions/models.DeviceModel'
+            type: array
+          pagination:
+            $ref: '#/definitions/models.MetaMode'
+        type: object
+      message:
+        description: |-
+          Descriptive message
+          Example: Configs fetched successfully
+        example: Configs fetched successfully
+        type: string
+      status:
+        description: |-
+          Status of the API call
+          Example: success
+        example: success
+        type: string
+      status_code:
+        description: |-
+          HTTP status code
+          Example: 200
+        example: 200
+        type: integer
+    type: object
+  models.ErrorDetail:
+    properties:
+      field:
+        description: |-
+          Field that caused the error.
+          Example: email
+        example: email
+        type: string
+      message:
+        description: |-
+          Message describing the error.
+          Example: Email is required
+        example: Email is required
+        type: string
+    type: object
+  models.GetParameterValuesRequest:
+    properties:
+      parameterNames:
+        items:
+          type: string
+        type: array
+    required:
+    - parameterNames
+    type: object
+  models.Logging:
+    properties:
+      logLevel:
+        enum:
+        - trace
+        - debug
+        - info
+        - warn
+        - error
+        type: string
+    required:
+    - logLevel
+    type: object
+  models.MetaMode:
+    properties:
+      limit:
+        description: |-
+          Limit applied to this query.
+          Example: 10
+        example: 10
+        type: integer
+      offset:
+        description: |-
+          Offset/Skip used in this query.
+          Example: 0
+        example: 0
+        type: integer
+      total:
+        description: |-
+          Total number of matching documents.
+          Example: 100
+        example: 100
+        type: integer
+    type: object
+  models.RefreshObjectRequest:
+    properties:
+      objectName:
+        type: string
+    required:
+    - objectName
+    type: object
+  models.SetPPPoECred:
+    properties:
+      PPPoEPassword:
+        maxLength: 100
+        minLength: 2
+        type: string
+      PPPoEUsername:
+        maxLength: 100
+        minLength: 2
+        type: string
+      deviceID:
+        type: string
+      manufacturer:
+        type: string
+    required:
+    - PPPoEPassword
+    - PPPoEUsername
+    - deviceID
+    - manufacturer
+    type: object
+  models.SetParameterValuesRequest:
+    properties:
+      parameterValues:
+        items:
+          items: {}
+          type: array
+        type: array
+    required:
+    - parameterValues
+    type: object
+  models.SetWirelessCred:
+    properties:
+      WirelessPassword:
+        maxLength: 100
+        minLength: 8
+        type: string
+      WirelessUsername:
+        maxLength: 100
+        minLength: 8
+        type: string
+      deviceID:
+        type: string
+      manufacturer:
+        type: string
+    required:
+    - WirelessPassword
+    - WirelessUsername
+    - deviceID
+    - manufacturer
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api
+host: 127.0.0.1:3000
+info:
+  contact:
+    email: support@praction.in
+    name: I9 API Support
+    url: http://www.praction.in/support
+  description: This is i9 GenieACS Proxy for API documents
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: https://praction.in/terms/
+  title: Domain Nat Core Service
+  version: 1.0.0
+paths:
+  /acs-proxy/devices/{id}/add-object:
+    post:
+      consumes:
+      - application/json
+      description: Adds a new object to the CPE
+      parameters:
+      - description: Device ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Object to add
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.AddObjectRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Trigger AddObject task
+      tags:
+      - Device Tasks
+  /acs-proxy/devices/{id}/delete-object:
+    post:
+      consumes:
+      - application/json
+      description: Deletes an object from the CPE
+      parameters:
+      - description: Device ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Object to delete
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.DeleteObjectRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Trigger DeleteObject task
+      tags:
+      - Device Tasks
+  /acs-proxy/devices/{id}/factory-reset:
+    post:
+      consumes:
+      - application/json
+      description: Sends a factory reset task to the device
+      parameters:
+      - description: Device ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Trigger Factory Reset task
+      tags:
+      - Device Tasks
+  /acs-proxy/devices/{id}/get-parameters:
+    post:
+      consumes:
+      - application/json
+      description: Requests the CPE to return values for listed parameters
+      parameters:
+      - description: Device ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Parameters to retrieve
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.GetParameterValuesRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Trigger GetParameterValues task
+      tags:
+      - Device Tasks
+  /acs-proxy/devices/{id}/projection:
+    get:
+      description: Fetch projected fields for a given device
+      parameters:
+      - description: Device ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Comma-separated list of fields
+        in: query
+        name: projection
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.DeviceResponseModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Specific Device Parameters
+      tags:
+      - Device
+  /acs-proxy/devices/{id}/reboot:
+    post:
+      consumes:
+      - application/json
+      description: Sends a reboot task to the device
+      parameters:
+      - description: Device ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Trigger Reboot task
+      tags:
+      - Device Tasks
+  /acs-proxy/devices/{id}/refresh:
+    post:
+      description: Send inform now to refresh device parameters
+      parameters:
+      - description: Device ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.DeviceResponseModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Refresh Device
+      tags:
+      - Device
+  /acs-proxy/devices/{id}/refresh-object:
+    post:
+      consumes:
+      - application/json
+      description: Refreshes an object in the CPE
+      parameters:
+      - description: Device ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Object to refresh
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.RefreshObjectRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Trigger RefreshObject task
+      tags:
+      - Device Tasks
+  /acs-proxy/devices/{id}/set-parameters:
+    post:
+      consumes:
+      - application/json
+      description: Set multiple configuration parameters on the CPE
+      parameters:
+      - description: Device ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Parameters to set
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.SetParameterValuesRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Trigger SetParameterValues task
+      tags:
+      - Device Tasks
+  /acs-proxy/devices/{id}/tasks:
+    get:
+      description: Fetch all scheduled tasks for a given device
+      parameters:
+      - description: Device ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.DeviceResponseModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Pending Tasks for Device
+      tags:
+      - Device
+  /acs-proxy/devices/{sn}:
+    get:
+      description: Retrieve device by its serial number
+      parameters:
+      - description: 'Device Serial Number: minimum 4 last characters'
+        in: path
+        name: sn
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.DeviceModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Device Info
+      tags:
+      - Devices
+  /acs-proxy/devices/last-inform:
+    get:
+      description: Get devices that haven't sent inform in X days (based on timestamp)
+      parameters:
+      - description: UTC timestamp in format YYYY-MM-DD HH:mm:ss +0000
+        in: query
+        name: timestamp
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.DeviceResponseModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Devices Not Informed Recently
+      tags:
+      - Device
+  /acs-proxy/devices/pppoe:
+    post:
+      consumes:
+      - application/json
+      description: Update PPPoE username and password on the device
+      parameters:
+      - description: PPPoE Credentials
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.SetPPPoECred'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.DeviceResponseModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Set PPPoE Credentials
+      tags:
+      - Device
+  /acs-proxy/devices/wifi:
+    post:
+      consumes:
+      - application/json
+      description: Update WiFi SSID and Password on the device
+      parameters:
+      - description: WiFi Credentials
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.SetWirelessCred'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.DeviceResponseModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Set WiFi Credentials
+      tags:
+      - Device
+  /acs-proxy/log-level:
+    post:
+      consumes:
+      - application/json
+      description: With this endpoint you can setup log level for domain-service
+      parameters:
+      - description: Log Message
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.Logging'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Setup log level for domain-service
+      tags:
+      - logs
+  /acs-proxy/tasks/{task_id}:
+    delete:
+      description: Delete a scheduled or completed ACS task
+      parameters:
+      - description: Task ID
+        in: path
+        name: task_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.DeviceResponseModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Task
+      tags:
+      - Tasks
+  /acs-proxy/tasks/{task_id}/retry:
+    post:
+      description: Retry a failed or pending ACS task
+      parameters:
+      - description: Task ID
+        in: path
+        name: task_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.DeviceResponseModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Retry Task
+      tags:
+      - Tasks
+  /api/v1/domain/health:
+    get:
+      description: Returns the health status of the service
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Health status
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Health check endpoint
+      tags:
+      - health
+  /swagger/json:
+    get:
+      description: Serve the OpenAPI documentation in JSON format
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Swagger JSON content
+          schema:
+            type: string
+        "404":
+          description: Swagger JSON file not found
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "503":
+          description: Service Unavailable - Failed to read or serve the file
+          schema:
+            $ref: '#/definitions/models.BaseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Swagger JSON documentation
+      tags:
+      - Swagger
+  /swagger/yaml:
+    get:
+      description: Serve the OpenAPI documentation in YAML format
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Swagger YAML content
+          schema:
+            type: string
+        "404":
+          description: Swagger YAML file not found
+          schema:
+            $ref: '#/definitions/models.BaseError'
+        "503":
+          description: Service Unavailable - Failed to read or serve the file
+          schema:
+            $ref: '#/definitions/models.BaseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Swagger YAML documentation
+      tags:
+      - Swagger
+securityDefinitions:
+  ApiKeyAuth:
+    description: Type "Bearer" followed by a space and then your key
+    in: header
+    name: Authorization
+    type: apiKey
+  CookieAuth:
+    description: Authentication via cookie. Set by the server after successful login.
+    in: cookie
+    name: auth
+    type: apiKey
+swagger: "2.0"

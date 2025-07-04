@@ -1,0 +1,1370 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is i9 GenieACS Proxy for API documents",
+        "title": "Domain Nat Core Service",
+        "termsOfService": "https://praction.in/terms/",
+        "contact": {
+            "name": "I9 API Support",
+            "url": "http://www.praction.in/support",
+            "email": "support@praction.in"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "host": "127.0.0.1:3000",
+    "basePath": "/api/v1",
+    "paths": {
+        "/acs-proxy/devices/last-inform": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get devices that haven't sent inform in X days (based on timestamp)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device"
+                ],
+                "summary": "Get Devices Not Informed Recently",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "UTC timestamp in format YYYY-MM-DD HH:mm:ss +0000",
+                        "name": "timestamp",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.DeviceResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/acs-proxy/devices/pppoe": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update PPPoE username and password on the device",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device"
+                ],
+                "summary": "Set PPPoE Credentials",
+                "parameters": [
+                    {
+                        "description": "PPPoE Credentials",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.SetPPPoECred"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.DeviceResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/acs-proxy/devices/wifi": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update WiFi SSID and Password on the device",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device"
+                ],
+                "summary": "Set WiFi Credentials",
+                "parameters": [
+                    {
+                        "description": "WiFi Credentials",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.SetWirelessCred"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.DeviceResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/acs-proxy/devices/{id}/add-object": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Adds a new object to the CPE",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device Tasks"
+                ],
+                "summary": "Trigger AddObject task",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Object to add",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AddObjectRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/acs-proxy/devices/{id}/delete-object": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Deletes an object from the CPE",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device Tasks"
+                ],
+                "summary": "Trigger DeleteObject task",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Object to delete",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.DeleteObjectRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/acs-proxy/devices/{id}/factory-reset": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Sends a factory reset task to the device",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device Tasks"
+                ],
+                "summary": "Trigger Factory Reset task",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/acs-proxy/devices/{id}/get-parameters": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Requests the CPE to return values for listed parameters",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device Tasks"
+                ],
+                "summary": "Trigger GetParameterValues task",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Parameters to retrieve",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.GetParameterValuesRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/acs-proxy/devices/{id}/projection": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Fetch projected fields for a given device",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device"
+                ],
+                "summary": "Get Specific Device Parameters",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Comma-separated list of fields",
+                        "name": "projection",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.DeviceResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/acs-proxy/devices/{id}/reboot": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Sends a reboot task to the device",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device Tasks"
+                ],
+                "summary": "Trigger Reboot task",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/acs-proxy/devices/{id}/refresh": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Send inform now to refresh device parameters",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device"
+                ],
+                "summary": "Refresh Device",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.DeviceResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/acs-proxy/devices/{id}/refresh-object": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Refreshes an object in the CPE",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device Tasks"
+                ],
+                "summary": "Trigger RefreshObject task",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Object to refresh",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.RefreshObjectRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/acs-proxy/devices/{id}/set-parameters": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Set multiple configuration parameters on the CPE",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device Tasks"
+                ],
+                "summary": "Trigger SetParameterValues task",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Parameters to set",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.SetParameterValuesRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/acs-proxy/devices/{id}/tasks": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Fetch all scheduled tasks for a given device",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device"
+                ],
+                "summary": "Get Pending Tasks for Device",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.DeviceResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/acs-proxy/devices/{sn}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Retrieve device by its serial number",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Devices"
+                ],
+                "summary": "Get Device Info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device Serial Number: minimum 4 last characters",
+                        "name": "sn",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.DeviceModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/acs-proxy/log-level": {
+            "post": {
+                "description": "With this endpoint you can setup log level for domain-service",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "logs"
+                ],
+                "summary": "Setup log level for domain-service",
+                "parameters": [
+                    {
+                        "description": "Log Message",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Logging"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/acs-proxy/tasks/{task_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete a scheduled or completed ACS task",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Delete Task",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Task ID",
+                        "name": "task_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.DeviceResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/acs-proxy/tasks/{task_id}/retry": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Retry a failed or pending ACS task",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Retry Task",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Task ID",
+                        "name": "task_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.DeviceResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/domain/health": {
+            "get": {
+                "description": "Returns the health status of the service",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "health"
+                ],
+                "summary": "Health check endpoint",
+                "responses": {
+                    "200": {
+                        "description": "Health status",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/swagger/json": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Serve the OpenAPI documentation in JSON format",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Swagger"
+                ],
+                "summary": "Get Swagger JSON documentation",
+                "responses": {
+                    "200": {
+                        "description": "Swagger JSON content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Swagger JSON file not found",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable - Failed to read or serve the file",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/swagger/yaml": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Serve the OpenAPI documentation in YAML format",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "Swagger"
+                ],
+                "summary": "Get Swagger YAML documentation",
+                "responses": {
+                    "200": {
+                        "description": "Swagger YAML content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Swagger YAML file not found",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable - Failed to read or serve the file",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.AddObjectRequest": {
+            "type": "object",
+            "required": [
+                "objectName"
+            ],
+            "properties": {
+                "objectName": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.BaseError": {
+            "description": "Generic error response wrapper.",
+            "type": "object",
+            "properties": {
+                "errors": {
+                    "description": "Errors is a list of detailed field-level errors.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ErrorDetail"
+                    }
+                },
+                "message": {
+                    "description": "Message is a human-readable error message.\nExample: Invalid input",
+                    "type": "string",
+                    "example": "Invalid input"
+                },
+                "status": {
+                    "description": "Status of the response (e.g., error).\nExample: error",
+                    "type": "string",
+                    "example": "error"
+                },
+                "status_code": {
+                    "description": "StatusCode is the HTTP status code.\nExample: 400",
+                    "type": "integer",
+                    "example": 400
+                }
+            }
+        },
+        "models.BaseSuccess": {
+            "description": "Generic success response wrapper.",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "Data holds the response payload. It can be any type."
+                },
+                "message": {
+                    "description": "Message is a human-readable message.\nExample: Operation completed successfully",
+                    "type": "string",
+                    "example": "Operation completed successfully"
+                },
+                "status": {
+                    "description": "Status of the response (e.g., success, info).\nExample: success",
+                    "type": "string",
+                    "example": "success"
+                },
+                "status_code": {
+                    "description": "StatusCode is the HTTP status code.\nExample: 200",
+                    "type": "integer",
+                    "example": 200
+                }
+            }
+        },
+        "models.DeleteObjectRequest": {
+            "type": "object",
+            "required": [
+                "objectName"
+            ],
+            "properties": {
+                "objectName": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.DeviceID": {
+            "type": "object",
+            "properties": {
+                "_Manufacturer": {
+                    "type": "string"
+                },
+                "_OUI": {
+                    "type": "string"
+                },
+                "_ProductClass": {
+                    "type": "string"
+                },
+                "_SerialNumber": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.DeviceModel": {
+            "type": "object",
+            "properties": {
+                "FactoryReset": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "InternetGatewayDevice": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "Reboot": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "VirtualParameters": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "_deviceId": {
+                    "$ref": "#/definitions/models.DeviceID"
+                },
+                "_id": {
+                    "type": "string"
+                },
+                "_lastBoot": {
+                    "type": "string"
+                },
+                "_lastInform": {
+                    "type": "string"
+                },
+                "_registered": {
+                    "type": "string"
+                },
+                "_timestamp": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.DeviceResponseModel": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "Data contains pagination and list of app messengers",
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.DeviceModel"
+                            }
+                        },
+                        "pagination": {
+                            "$ref": "#/definitions/models.MetaMode"
+                        }
+                    }
+                },
+                "message": {
+                    "description": "Descriptive message\nExample: Configs fetched successfully",
+                    "type": "string",
+                    "example": "Configs fetched successfully"
+                },
+                "status": {
+                    "description": "Status of the API call\nExample: success",
+                    "type": "string",
+                    "example": "success"
+                },
+                "status_code": {
+                    "description": "HTTP status code\nExample: 200",
+                    "type": "integer",
+                    "example": 200
+                }
+            }
+        },
+        "models.ErrorDetail": {
+            "type": "object",
+            "properties": {
+                "field": {
+                    "description": "Field that caused the error.\nExample: email",
+                    "type": "string",
+                    "example": "email"
+                },
+                "message": {
+                    "description": "Message describing the error.\nExample: Email is required",
+                    "type": "string",
+                    "example": "Email is required"
+                }
+            }
+        },
+        "models.GetParameterValuesRequest": {
+            "type": "object",
+            "required": [
+                "parameterNames"
+            ],
+            "properties": {
+                "parameterNames": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "models.Logging": {
+            "type": "object",
+            "required": [
+                "logLevel"
+            ],
+            "properties": {
+                "logLevel": {
+                    "type": "string",
+                    "enum": [
+                        "trace",
+                        "debug",
+                        "info",
+                        "warn",
+                        "error"
+                    ]
+                }
+            }
+        },
+        "models.MetaMode": {
+            "type": "object",
+            "properties": {
+                "limit": {
+                    "description": "Limit applied to this query.\nExample: 10",
+                    "type": "integer",
+                    "example": 10
+                },
+                "offset": {
+                    "description": "Offset/Skip used in this query.\nExample: 0",
+                    "type": "integer",
+                    "example": 0
+                },
+                "total": {
+                    "description": "Total number of matching documents.\nExample: 100",
+                    "type": "integer",
+                    "example": 100
+                }
+            }
+        },
+        "models.RefreshObjectRequest": {
+            "type": "object",
+            "required": [
+                "objectName"
+            ],
+            "properties": {
+                "objectName": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.SetPPPoECred": {
+            "type": "object",
+            "required": [
+                "PPPoEPassword",
+                "PPPoEUsername",
+                "deviceID",
+                "manufacturer"
+            ],
+            "properties": {
+                "PPPoEPassword": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 2
+                },
+                "PPPoEUsername": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 2
+                },
+                "deviceID": {
+                    "type": "string"
+                },
+                "manufacturer": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.SetParameterValuesRequest": {
+            "type": "object",
+            "required": [
+                "parameterValues"
+            ],
+            "properties": {
+                "parameterValues": {
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {}
+                    }
+                }
+            }
+        },
+        "models.SetWirelessCred": {
+            "type": "object",
+            "required": [
+                "WirelessPassword",
+                "WirelessUsername",
+                "deviceID",
+                "manufacturer"
+            ],
+            "properties": {
+                "WirelessPassword": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 8
+                },
+                "WirelessUsername": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 8
+                },
+                "deviceID": {
+                    "type": "string"
+                },
+                "manufacturer": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "description": "Type \"Bearer\" followed by a space and then your key",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        },
+        "CookieAuth": {
+            "description": "Authentication via cookie. Set by the server after successful login.",
+            "type": "apiKey",
+            "name": "auth",
+            "in": "cookie"
+        }
+    },
+    "externalDocs": {
+        "description": "OpenAPI",
+        "url": "https://swagger.io/resources/open-api"
+    }
+}
